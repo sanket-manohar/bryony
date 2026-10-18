@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.1
+
+- Renamed to "Bryony: State Flow for Flutter".
+- Added a third-party trademark notice to the license and README.
+
 ## 1.0.0
 
 First release.

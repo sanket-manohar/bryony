@@ -1,6 +1,6 @@
 <p align="center"><img src="images/icon.png" width="96" alt="Bryony logo"></p>
 
-<h1 align="center">Bryony: Flutter State Flow</h1>
+<h1 align="center">Bryony: State Flow for Flutter</h1>
 
 <p align="center">
   See how state flows through your Flutter app, right inside VS Code.<br>
@@ -65,3 +65,5 @@ Found a bug or have an idea? [Open an issue](https://github.com/sanket-manohar/b
 Copyright (c) 2026 Sanket Santosh Vidya Manohar. All rights reserved.
 
 Bryony is free to install and use. Copying, modifying, redistributing or repackaging it is not allowed. See [LICENSE](LICENSE) for the full terms.
+
+Flutter, Dart, Riverpod, Bloc, Provider, GetX and MobX are trademarks of their respective owners. Bryony is an independent tool and is not affiliated with or endorsed by them.
