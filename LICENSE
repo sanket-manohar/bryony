@@ -1,13 +1,13 @@
-Bryony: Flutter State Flow (Visual Studio Code extension)
+Bryony: State Flow for Flutter (Visual Studio Code extension)
 Copyright (c) 2026 Sanket Santosh Vidya Manohar. All rights reserved.
-
+ 
 PROPRIETARY SOFTWARE LICENSE
-
+ 
 1. Grant. You may install and use this extension ("the Software") free of
    charge, through the Visual Studio Code Marketplace or an official release
    from the copyright holder, for your own personal or internal business
    development work.
-
+ 
 2. Restrictions. Except as expressly allowed in section 1, you may not, and
    may not allow anyone else to:
    a. copy, reproduce or mirror the Software or any part of it;
@@ -18,37 +18,43 @@ PROPRIETARY SOFTWARE LICENSE
       code, except to the extent applicable law expressly permits this
       despite this restriction;
    e. remove or alter any copyright, trademark or license notice.
-
+ 
 3. Ownership. The Software, including its code, design, graphics and the
    "Bryony" name and logo, is owned by the copyright holder and is licensed,
    not sold. All rights not expressly granted are reserved.
-
+ 
 4. Your code. Bryony analyzes your source code locally. You keep all rights
    to your code and to any files the Software generates in your projects
    (such as bryony_observer.dart), and may use them freely.
-
-5. Privacy. The Software analyzes your code only on your own machine. It
+ 
+5. Third-party names. Flutter, Dart, Riverpod, Bloc, Provider, GetX, MobX
+   and Visual Studio Code are trademarks of their respective owners. They
+   are named only to describe what the Software works with. The Software is
+   an independent product and is not affiliated with, sponsored by or
+   endorsed by any of them.
+ 
+6. Privacy. The Software analyzes your code only on your own machine. It
    does not collect, store or send your code, usage data or personal
    information to the copyright holder or anyone else.
-
-6. Termination. This license ends automatically if you breach it. You must
+ 
+7. Termination. This license ends automatically if you breach it. You must
    then stop using and delete all copies of the Software.
-
-7. No warranty. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+ 
+8. No warranty. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
    KIND, EXPRESS OR IMPLIED, INCLUDING MERCHANTABILITY, FITNESS FOR A
    PARTICULAR PURPOSE AND NON-INFRINGEMENT.
-
-8. Limitation of liability. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE
+ 
+9. Limitation of liability. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE
    FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY ARISING FROM OR IN CONNECTION
    WITH THE SOFTWARE OR ITS USE.
-
-9. Changes. Future versions of the Software may come with different terms,
-   including paid editions or features. Each version you install stays under
-   the terms that came with it.
-
-10. Governing law. This license is governed by the laws of India. The courts
+ 
+10. Changes. Future versions of the Software may come with different terms,
+    including paid editions or features. Each version you install stays
+    under the terms that came with it.
+ 
+11. Governing law. This license is governed by the laws of India. The courts
     of India have exclusive jurisdiction over any dispute arising from it.
-
+ 
 For permissions beyond this license, contact the copyright holder through
 https://marketplace.visualstudio.com/publishers/sanket-manohar or
 https://github.com/sanket-manohar.
