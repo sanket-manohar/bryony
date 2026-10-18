@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bryony: Flutter State Flow for VS Code</title>
+<meta name="description" content="See how state flows through your Flutter app inside VS Code. Riverpod, Bloc, Provider, GetX and MobX in one interactive, live graph.">
+<meta property="og:title" content="Bryony: Flutter State Flow">
+<meta property="og:description" content="Riverpod, Bloc, Provider, GetX and MobX in one interactive, live graph inside VS Code.">
+<meta property="og:image" content="https://sanket-manohar.github.io/bryony/images/overview.png">
+<link rel="icon" href="images/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Roboto+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8fafd; --surface: #ffffff; --surface-2: #eef2f8; --text: #1f1f1f; --text-2: #444746; --text-3: #5f6368;
+  --primary: #0b57d0; --on-primary: #ffffff; --primary-container: #d3e3fd; --on-primary-container: #041e49;
+  --outline: #c4c7c5; --green: #188038; --red: #d93025; --amber: #e37400; --purple: #9334e6; --pink: #c2185b; --brown: #795548; --indigo: #3f51b5;
+  --shadow: 0 1px 2px rgba(60,64,67,.3), 0 2px 6px 2px rgba(60,64,67,.15);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131314; --surface: #1e1f20; --surface-2: #282a2c; --text: #e3e3e3; --text-2: #c4c7c5; --text-3: #9aa0a6;
+    --primary: #a8c7fa; --on-primary: #062e6f; --primary-container: #0842a0; --on-primary-container: #d3e3fd;
+    --outline: #444746; --green: #81c995; --red: #f28b82; --amber: #fdd663; --purple: #d7aefb; --pink: #f48fb1; --brown: #bcaaa4; --indigo: #9fa8da;
+    --shadow: 0 1px 3px rgba(0,0,0,.5), 0 4px 8px 3px rgba(0,0,0,.25);
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 Roboto, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; height: auto; display: block; }
+picture.shot { display: block; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+
+header.top { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); }
+header.top .wrap { display: flex; align-items: center; gap: 12px; height: 64px; }
+.brand { display: flex; align-items: center; gap: 10px; font-size: 20px; color: var(--text); }
+.brand img { width: 32px; height: 32px; }
+header nav { margin-left: auto; display: flex; gap: 4px; }
+header nav a { color: var(--text-2); padding: 8px 14px; border-radius: 20px; font-weight: 500; font-size: 14px; }
+header nav a:hover { background: var(--surface-2); text-decoration: none; }
+
+.btn { display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 24px; border-radius: 24px; font: 500 15px Roboto, sans-serif; letter-spacing: .01em; }
+.btn:hover { text-decoration: none; filter: brightness(1.05); }
+.btn.filled { background: var(--primary); color: var(--on-primary); box-shadow: var(--shadow); }
+.btn.tonal { background: var(--primary-container); color: var(--on-primary-container); }
+.btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+.hero { text-align: center; padding: 56px 0 40px; }
+.hero h1 { font-size: clamp(34px, 6vw, 58px); line-height: 1.1; font-weight: 400; letter-spacing: -.02em; margin: 0 auto 18px; max-width: 820px; }
+.hero h1 span { background: linear-gradient(90deg, #4285f4, #34a853 40%, #fbbc04 70%, #ea4335); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero p.lead { font-size: clamp(17px, 2.2vw, 20px); color: var(--text-2); max-width: 680px; margin: 0 auto 28px; }
+.ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.libs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+.lib { display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 14px; border: 1px solid var(--outline); border-radius: 8px; font-size: 14px; color: var(--text-2); background: var(--surface); }
+.lib i { width: 10px; height: 10px; border-radius: 50%; }
+
+.shot { margin: 8px auto 0; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--outline); background: var(--surface); }
+
+section { padding: 72px 0 8px; }
+section h2 { font-size: clamp(26px, 4vw, 36px); font-weight: 400; margin: 0 0 8px; letter-spacing: -.01em; }
+section p.sub { color: var(--text-2); margin: 0 0 32px; max-width: 680px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border-radius: 20px; padding: 24px; border: 1px solid color-mix(in srgb, var(--outline) 60%, transparent); }
+.card h3 { margin: 14px 0 6px; font-size: 18px; font-weight: 500; }
+.card p { margin: 0; color: var(--text-2); font-size: 15px; }
+.icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; }
+.icon svg { width: 24px; height: 24px; }
+
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.split figure { margin: 0; }
+.split figcaption { color: var(--text-3); font-size: 14px; margin-top: 10px; }
+.split .shot { margin: 0; border-radius: 16px; }
+
+.findings { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; }
+.findings li { display: flex; gap: 12px; align-items: flex-start; background: var(--surface); border-radius: 14px; padding: 14px 16px; border: 1px solid color-mix(in srgb, var(--outline) 60%, transparent); font-size: 15px; }
+.sev { flex: none; width: 22px; height: 22px; }
+code { font: 13.5px "Roboto Mono", monospace; background: var(--surface-2); padding: 1px 6px; border-radius: 6px; }
+
+.steps { counter-reset: s; display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.step { background: var(--surface); border-radius: 20px; padding: 22px; border: 1px solid color-mix(in srgb, var(--outline) 60%, transparent); }
+.step::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--primary-container); color: var(--on-primary-container); font-weight: 500; margin-bottom: 12px; }
+.step p { margin: 0; color: var(--text-2); font-size: 15px; }
+.step b { color: var(--text); font-weight: 500; }
+
+.cta-band { margin: 72px 0 0; background: var(--primary-container); color: var(--on-primary-container); border-radius: 28px; padding: 40px 24px; text-align: center; }
+.cta-band h2 { margin: 0 0 8px; font-weight: 400; font-size: clamp(24px, 3.6vw, 32px); }
+.cta-band p { margin: 0 0 22px; opacity: .85; }
+
+footer { padding: 40px 0 48px; color: var(--text-3); font-size: 14px; }
+footer .wrap { display: flex; gap: 16px; flex-wrap: wrap; justify-content: space-between; }
+footer nav { display: flex; gap: 18px; }
+
+@media (max-width: 760px) {
+  header nav a.hide-sm { display: none; }
+  .split { grid-template-columns: 1fr; }
+  .hero { padding-top: 32px; }
+  .shot { border-radius: 12px; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="images/icon.png" alt="">Bryony</a>
+    <nav>
+      <a class="hide-sm" href="#features">Features</a>
+      <a class="hide-sm" href="#start">Get started</a>
+      <a href="https://github.com/sanket-manohar/bryony/issues">Feedback</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>See how <span>state flows</span> through your Flutter app</h1>
+    <p class="lead">Bryony draws your providers, Blocs, models, controllers and stores, and the widgets that use them, as one interactive graph inside VS Code. Start debugging and it comes alive.</p>
+    <div class="ctas">
+      <a class="btn filled" href="https://marketplace.visualstudio.com/items?itemName=sanket-manohar.bryony">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>Install for VS Code</a>
+      <a class="btn tonal" href="#features">See what it does</a>
+    </div>
+    <div class="libs" aria-label="Supported libraries">
+      <span class="lib"><i style="background:#1a73e8"></i>Riverpod</span>
+      <span class="lib"><i style="background:var(--red)"></i>Bloc &amp; Cubit</span>
+      <span class="lib"><i style="background:var(--indigo)"></i>Provider</span>
+      <span class="lib"><i style="background:var(--pink)"></i>GetX</span>
+      <span class="lib"><i style="background:var(--brown)"></i>MobX</span>
+    </div>
+  </div>
+
+  <picture class="shot">
+    <source srcset="images/overview-dark.png" media="(prefers-color-scheme: dark)">
+    <img src="images/overview.png" alt="The Bryony graph showing Riverpod providers, a Bloc, Provider models, GetX controllers and MobX stores connected to widgets" width="2880" height="1720">
+  </picture>
+
+  <section id="features">
+    <h2>Answers, not guesswork</h2>
+    <p class="sub">What does this provider depend on? Who rebuilds when it changes? Why does <code>Get.find</code> throw here? Bryony shows you, with no code changes and no extra window.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="icon" style="background:color-mix(in srgb,#1a73e8 16%,transparent)"><svg viewBox="0 0 24 24" fill="#1a73e8"><path d="M12 3a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM5 15a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm14 0a3 3 0 1 1 0 6 3 3 0 0 1 0-6zM11 9.5h2v2.9l4.3 2.5-1 1.7L12 14.1l-4.3 2.5-1-1.7 4.3-2.5z"/></svg></div>
+        <h3>Five libraries, one graph</h3>
+        <p>Riverpod, Bloc and Cubit, Provider, GetX and MobX side by side. Perfect for apps mid-migration.</p>
+      </div>
+      <div class="card">
+        <div class="icon" style="background:color-mix(in srgb,var(--green) 16%,transparent)"><svg viewBox="0 0 24 24" fill="var(--green)"><path d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 7H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z"/></svg></div>
+        <h3>Trace anything</h3>
+        <p>Click a node to light up everything upstream and downstream. Double-click to jump straight to the code.</p>
+      </div>
+      <div class="card">
+        <div class="icon" style="background:color-mix(in srgb,var(--amber) 18%,transparent)"><svg viewBox="0 0 24 24" fill="var(--amber)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+        <h3>Catch bugs early</h3>
+        <p>Cycles, missing providers, unregistered controllers and more show up in the Problems panel as you type.</p>
+      </div>
+      <div class="card">
+        <div class="icon" style="background:color-mix(in srgb,var(--purple) 16%,transparent)"><svg viewBox="0 0 24 24" fill="var(--purple)"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></div>
+        <h3>Live while you debug</h3>
+        <p>One command adds a debug-only observer. Nodes pulse with update counts, the latest value and a timeline.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Every library, in detail</h2>
+    <p class="sub">Each node knows its kind. Blocs show which events produce which states, GetX controllers list their Rx fields and workers, and MobX stores list observables, computeds and actions.</p>
+    <div class="split">
+      <figure><div class="shot"><img src="images/live.png" alt="A Bloc with its event handlers, emitted states and live updates" loading="lazy" width="2880" height="1720"></div><figcaption>Bloc events to states, with live updates</figcaption></figure>
+      <figure><div class="shot"><img src="images/getx.png" alt="A GetX controller with its reactive fields and workers" loading="lazy" width="2880" height="1720"></div><figcaption>GetX controllers, registrations, Rx fields and workers</figcaption></figure>
+      <figure><div class="shot"><img src="images/mobx.png" alt="A MobX store with its observables, computeds and actions" loading="lazy" width="2880" height="1720"></div><figcaption>MobX stores and the widgets that observe them</figcaption></figure>
+      <figure><div class="shot"><img src="images/findings.png" alt="Bryony findings in the VS Code sidebar, CodeLens and Problems panel" loading="lazy" width="1500" height="900"></div><figcaption>Sidebar, CodeLens and the Problems panel</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Findings that matter</h2>
+    <p class="sub">Problems that usually surface only at runtime, flagged in the editor.</p>
+    <ul class="findings">
+      <li><svg class="sev" viewBox="0 0 24 24" fill="var(--red)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg><span>Dependency cycles between providers</span></li>
+      <li><svg class="sev" viewBox="0 0 24 24" fill="var(--amber)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><span>Bloc events that are never handled</span></li>
+      <li><svg class="sev" viewBox="0 0 24 24" fill="var(--amber)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><span><code>.family</code> providers that are never disposed</span></li>
+      <li><svg class="sev" viewBox="0 0 24 24" fill="var(--amber)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><span>Provider models that nobody provides</span></li>
+      <li><svg class="sev" viewBox="0 0 24 24" fill="var(--amber)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><span>Models created inside <code>.value(...)</code></span></li>
+      <li><svg class="sev" viewBox="0 0 24 24" fill="var(--amber)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><span><code>Get.find</code> on a controller nothing registers</span></li>
+      <li><svg class="sev" viewBox="0 0 24 24" fill="var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg><span>MobX stores used without an <code>Observer</code></span></li>
+      <li><svg class="sev" viewBox="0 0 24 24" fill="var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg><span><code>ref.read</code> while building, and state nothing reads</span></li>
+    </ul>
+  </section>
+
+  <section id="start">
+    <h2>Up and running in a minute</h2>
+    <p class="sub">Works on Windows, macOS and Linux with VS Code 1.85 or later. Your code never leaves your machine.</p>
+    <div class="steps">
+      <div class="step"><p><b>Install</b> Bryony from the Visual Studio Marketplace.</p></div>
+      <div class="step"><p><b>Open</b> a Flutter project. A short tour shows you around.</p></div>
+      <div class="step"><p><b>Press</b> <code>Ctrl+Alt+G</code> (<code>Cmd+Alt+G</code> on macOS) to open the graph.</p></div>
+      <div class="step"><p><b>Run</b> “Bryony: Set Up Live Mode”, then start debugging.</p></div>
+    </div>
+  </section>
+
+  <div class="cta-band">
+    <h2>Make your app's state visible</h2>
+    <p>Free to install. No setup, no code changes.</p>
+    <a class="btn filled" href="https://marketplace.visualstudio.com/items?itemName=sanket-manohar.bryony">
+      <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>Install for VS Code</a>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Sanket Santosh Vidya Manohar. All rights reserved.</span>
+    <nav>
+      <a href="https://marketplace.visualstudio.com/publishers/sanket-manohar">Marketplace</a>
+      <a href="https://github.com/sanket-manohar">GitHub</a>
+      <a href="https://github.com/sanket-manohar/bryony/blob/main/LICENSE">License</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
