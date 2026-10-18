@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Bryony on the Visual Studio Marketplace
+    url: https://marketplace.visualstudio.com/items?itemName=sanket-manohar.bryony
+    about: Install the extension or leave a rating.
